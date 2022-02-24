@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const { stringify } = require('nodemon/lib/utils');
-const Schema = mongoos.Schema;
+const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
   {
     title: {
-      type: string,
+      type: String,
       required: true,
     },
     imageUrl: {
