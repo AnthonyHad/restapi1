@@ -31,4 +31,7 @@ router.put(
   feedController.updatePost
 );
 
+// no body sent
+router.delete('/post/:postId', feedController.deletePost);
+
 module.exports = router;
