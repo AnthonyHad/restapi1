@@ -39,18 +39,25 @@ exports.createPost = (req, res, next) => {
     const error = new Error('Validation failed, data is incorrect');
     error.statusCode = 422;
     //will exit to locate the next erorr handling middleware/function
-    throw err;
+    throw error;
     // return res.status(422).json({
     //   message: 'Validation failed, data is incorrect',
     //   errors: errors.array(),
     // });
   }
+  // client side should use formData object given by JS
+  if (!req.file) {
+    const error = new Error('No image provided.');
+    error.statusCode = 422;
+    throw error;
+  }
+  const imageUrl = req.file.path;
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
     title: title,
     content: content,
-    imageUrl: 'image/395497.jpg',
+    imageUrl: imageUrl,
     creator: { name: 'Anthony' },
   });
   post
