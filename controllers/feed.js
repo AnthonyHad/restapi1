@@ -22,10 +22,15 @@ exports.getPosts = (req, res, next) => {
 exports.createPost = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({
-      message: 'Validation failed, data is incorrect',
-      errors: errors.array(),
-    });
+    //creating a new Error Object
+    const error = new Error('Validation failed, data is incorrect');
+    error.statusCode = 422;
+    //will exit to locate the next erorr handling middleware/function
+    throw err;
+    // return res.status(422).json({
+    //   message: 'Validation failed, data is incorrect',
+    //   errors: errors.array(),
+    // });
   }
   const title = req.body.title;
   const content = req.body.content;
@@ -45,6 +50,10 @@ exports.createPost = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      //async
+      next(err);
     });
 };
