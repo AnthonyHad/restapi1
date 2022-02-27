@@ -17,6 +17,7 @@ exports.getPosts = (req, res, next) => {
     .then((count) => {
       totalItems = count;
       return Post.find()
+        .populate('creator')
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
@@ -48,6 +49,8 @@ exports.getPosts = (req, res, next) => {
   //     },
   //   ],
   // });
+
+  // if a statement was to be here JS would continue here while waiting to count documents
 };
 
 exports.createPost = (req, res, next) => {
