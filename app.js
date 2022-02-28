@@ -71,6 +71,13 @@ mongoose
     'mongodb+srv://Antho:LucAmMfcBVQyHam5@test.imnmi.mongodb.net/test?retryWrites=true&w=majority'
   )
   .then((result) => {
-    app.listen(8080);
+    const server = app.listen(8080);
+    // establishing a socket io connection
+    const io = require('./socket').init(server); // returns a socket object
+    io.on('connection', (socket) => {
+      // will fire when a client connects here
+      console.log('Client Connected');
+      // we should open the socket on the client side
+    });
   })
   .catch((err) => console.log(err));
