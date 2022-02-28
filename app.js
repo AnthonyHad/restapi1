@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth');
 
 const mongoose = require('mongoose');
 const multer = require('multer');
+const helmet = require('helmet');
 
 const app = express();
 
@@ -39,6 +40,9 @@ app.use(
 );
 //constructs an absolute path to serve images statically
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//Sets better security for our response headers
+app.use(helmet());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
