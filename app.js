@@ -68,10 +68,12 @@ app.use((err, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb+srv://Antho:LucAmMfcBVQyHam5@test.imnmi.mongodb.net/test?retryWrites=true&w=majority'
+    // 'mongodb+srv://Antho:LucAmMfcBVQyHam5@test.imnmi.mongodb.net/test?retryWrites=true&w=majority'
+    //we can add env variables in the packageJSON file in the start
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@test.imnmi.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`
   )
   .then((result) => {
-    const server = app.listen(8080);
+    const server = app.listen(process.env.PORT || 8080);
     // establishing a socket io connection
     const io = require('./socket').init(server); // returns a socket object
     io.on('connection', (socket) => {
