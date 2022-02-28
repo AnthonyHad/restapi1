@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const feedRoutes = require('./routes/feed');
 const authRoutes = require('./routes/auth');
@@ -6,6 +7,8 @@ const authRoutes = require('./routes/auth');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 
 const app = express();
 
@@ -41,8 +44,16 @@ app.use(
 //constructs an absolute path to serve images statically
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+
 //Sets better security for our response headers
 app.use(helmet());
+app.use(compression()); //image files are not compressed // some hosting providers can have compression built-in
+//used for logging data
+app.use(morgan('combined', { stream: accessLogStream })); // can also be done by hosting provider
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
